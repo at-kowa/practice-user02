@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>写真共有（練習版） v1</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ログイン画面 -->
+<section id="login-view" class="view" hidden>
+  <div class="login-box">
+    <h1 class="app-name">写真共有（練習版） <span class="ver">v1</span></h1>
+    <p class="notice" id="login-notice"></p>
+    <p class="mode-badge" id="login-mode" hidden>モックモード</p>
+    <form id="login-form" novalidate>
+      <label for="login-email">メールアドレス</label>
+      <input type="email" id="login-email" autocomplete="email" required>
+      <button type="submit" id="login-send" class="btn-main btn-big">ログイン用メールを送る</button>
+    </form>
+    <p id="login-msg" class="msg" role="status"></p>
+    <p id="login-err" class="msg msg-err" role="alert"></p>
+    <button type="button" id="mock-open-link" class="btn-sub btn-big" hidden>（モック）リンクを開いたことにする</button>
+  </div>
+</section>
+
+<!-- ログイン後 -->
+<section id="main-view" class="view" hidden>
+  <header class="app-header">
+    <div class="header-row">
+      <h1 class="app-name">写真共有（練習版） <span class="ver">v1</span></h1>
+      <span class="mode-badge" id="mode-badge" hidden>モックモード</span>
+      <span class="user-email" id="user-email"></span>
+      <button type="button" id="logout-btn" class="btn-sub">ログアウト</button>
+    </div>
+    <p class="notice" id="main-notice"></p>
+    <nav class="tabs">
+      <button type="button" class="tab" data-tab="send">送る</button>
+      <button type="button" class="tab" data-tab="view">見る</button>
+    </nav>
+  </header>
+
+  <!-- 送る（スマホ向け） -->
+  <main id="page-send" class="page page-send">
+    <label class="btn-main btn-big file-label" id="pick-label">
+      写真を撮る／選ぶ
+      <input type="file" id="pick-input" accept="image/*" multiple>
+    </label>
+    <p id="pick-msg" class="msg" role="status"></p>
+    <ul id="pick-list" class="pick-list"></ul>
+
+    <label for="memo-input" class="memo-label">メモ（任意・200文字まで。この回の全部の写真に付きます）</label>
+    <input type="text" id="memo-input" maxlength="200" autocomplete="off">
+    <p class="memo-count" id="memo-count">残り200文字</p>
+
+    <button type="button" id="send-btn" class="btn-main btn-big" disabled>送信</button>
+    <button type="button" id="retry-btn" class="btn-sub btn-big" hidden>失敗した写真をもう一度送る</button>
+    <p id="send-progress" class="progress" role="status"></p>
+    <p id="send-err" class="msg msg-err" role="alert"></p>
+    <p id="send-done" class="msg" hidden>送信が終わりました。<a href="#" id="go-view-link">「見る」タブで確かめる</a></p>
+  </main>
+
+  <!-- 見る（PC向け） -->
+  <main id="page-view" class="page page-view">
+    <div class="filters">
+      <label>開始日 <input type="date" id="f-from"></label>
+      <label>終了日 <input type="date" id="f-to"></label>
+      <label>送信者 <select id="f-sender"><option value="">全員</option></select></label>
+      <label>メモ <input type="text" id="f-memo" placeholder="部分一致"></label>
+    </div>
+    <div class="toolbar">
+      <span id="view-count" class="count"></span>
+      <button type="button" id="sel-all-btn" class="btn-sub">表示中をすべて選択</button>
+      <button type="button" id="sel-clear-btn" class="btn-sub">選択を外す</button>
+      <button type="button" id="zip-btn" class="btn-main" disabled>選択した写真をzipで保存（0枚）</button>
+      <button type="button" id="reload-btn" class="btn-sub">再読み込み</button>
+    </div>
+    <p id="zip-msg" class="msg" role="status"></p>
+    <p id="view-err" class="msg msg-err" role="alert"></p>
+    <p id="view-empty" class="msg" hidden></p>
+    <ul id="gallery" class="gallery"></ul>
+
+    <div class="purge-area">
+      <button type="button" id="purge-btn" class="btn-danger">30日を過ぎた写真の片付け</button>
+      <div id="purge-confirm" class="confirm" hidden>
+        <p>30日を過ぎた写真のファイルと記録を消します。元に戻せません。よろしいですか。</p>
+        <button type="button" id="purge-yes" class="btn-danger">はい</button>
+        <button type="button" id="purge-no" class="btn-sub">いいえ</button>
+      </div>
+      <p id="purge-msg" class="msg small" role="status"></p>
+    </div>
+  </main>
+</section>
+
+<footer class="app-footer">
+  <details>
+    <summary>使い方</summary>
+    <ol>
+      <li>会社のメールアドレスを入れて「ログイン用メールを送る」を押し、届いたメールのリンクを開きます。</li>
+      <li>「送る」タブで「写真を撮る／選ぶ」を押し、写真を選んで（1回20枚まで）、必要ならメモを入れて「送信」を押します。</li>
+      <li>「見る」タブで、写真を押すと1枚保存します。チェックを付けて「選択した写真をzipで保存」で、まとめて保存します（1回50枚まで）。</li>
+      <li>写真は30日を過ぎると一覧に出なくなります。ファイルの片付けは「見る」を開いたとき1日1回自動で行います。</li>
+    </ol>
+  </details>
+  <details>
+    <summary>改版履歴</summary>
+    <ul>
+      <li>v1（2026-10-20）：初版（送る・見る・zip保存・期限切れの片付け・モックモード）</li>
+    </ul>
+  </details>
+  <p class="foot-ver">写真共有（練習版） v1</p>
+</footer>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
