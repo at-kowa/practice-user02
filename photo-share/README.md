@@ -47,8 +47,8 @@ npm の依存・外部CDNはありません。Supabaseへは `fetch`（送信の
 
 | 区分 | 項目 | 値の例 |
 |---|---|---|
-| Authentication／URL設定 | Site URL | `https://<Vercelのプロジェクト名>.vercel.app` |
-| Authentication／URL設定 | Redirect URLs | `https://<Vercelのプロジェクト名>.vercel.app/**` |
+| Authentication／URL設定 | Site URL | 変更しない（複数のアプリで共有しているプロジェクトでは、他のアプリのログインに影響するため） |
+| Authentication／URL設定 | Redirect URLs | `https://<Vercelのプロジェクト名>.vercel.app/**` を追加（既存の行は消さない） |
 | Authentication／Providers | Email | 有効 |
 | Authentication／Providers（Email） | 新規利用者の登録を許可 | 有効（初回ログインで利用者が作られるため） |
 | Authentication／Email | 確認メール・マジックリンクの送信元 | 既定のまま、または会社で認められた送信設定 |
