@@ -1,0 +1,5 @@
+config.js
+dist/
+.env*
+node_modules/
+.vercel/
